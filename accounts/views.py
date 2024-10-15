@@ -57,13 +57,13 @@ def registerUser(request):
             password = form.cleaned_data['password']
             user = User.objects.create_user(first_name=first_name, last_name=last_name, username=username, email=email, password=password)
             user.role = User.CUSTOMER
-            user.is_active = True
+            user.is_active = True # Activate for email token activate
             user.save()
 
             # Send verification email
             mail_subject = 'Please activate your account'
             email_template = 'accounts/emails/account_verification_email.html'
-            # send_verification_email(request, user, mail_subject, email_template)
+            send_verification_email(request, user, mail_subject, email_template)
             messages.success(request, 'Your account has been registered sucessfully!')
             return redirect('registerUser')
         else:
@@ -270,3 +270,4 @@ def reset_password(request):
             messages.error(request, 'Password do not match!')
             return redirect('reset_password')
     return render(request, 'accounts/reset_password.html')
+    
